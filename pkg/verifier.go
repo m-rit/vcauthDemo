@@ -25,14 +25,15 @@ func ValidateAccess(verifier jwx.Verifier, r resolution.Resolver, submissionByte
 		return errors.Wrap(err, "validating VP")
 	}
 	if len(vp.VerifiableCredential) < 2 {
+		// Case 1- parse VC and get all roles
 		x, _ := vp.VerifiableCredential[0].(string)
 		_, _, token, _ := credential.ParseVerifiableCredentialFromJWT(x)
 		_ = fmt.Sprintf("%+v", token.CredentialSubject)
 		return nil
 	}
 	x, _ := vp.VerifiableCredential[1].(string)
-	//_, _,token,_ := integrity.ParseVerifiableCredentialFromJWT(x)
-	fmt.Sprintf("%+v", x)
+	_, _, token, _ := credential.ParseVerifiableCredentialFromJWT(x)
+	fmt.Sprintf("%+v", token)
 
 	return nil
 }

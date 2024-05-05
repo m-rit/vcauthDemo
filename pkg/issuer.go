@@ -11,12 +11,9 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// BuildExampleUniversityVC Makes a Verifiable Credential using the VC data type directly.
-// Alternatively, use the builder. A VC is set of tamper-evident claims and metadata that cryptographically proves
-// who issued it.  Building a VC means using the CredentialBuilder as part of the credentials package in the ssk-sdk.
-// VerifiableCredential is the verifiable credential model outlined in the vc-data-model spec:
-// https://www.w3.org/TR/2021/REC-vc-data-model-20211109/#basic-concept
-func BuildExampleUniversityVC(signer jwx.Signer, universityDID, recipientDID string) (credID string, cred string, err error) {
+// BuildSampleIdentityVC Makes a Verifiable Credential using the VC data type using the CredentialBuilder as part of the credentials package in the ssk-sdk.
+// It creates a credential with claims of Identity VC which is the Organisation name here
+func BuildSampleIdentityVC(signer jwx.Signer, universityDID, recipientDID string) (credID string, cred string, err error) {
 	knownContext := []string{"https://www.w3.org/2018/credentials/v1",
 		"https://www.w3.org/2018/credentials/examples/v1"} // JSON-LD context statement
 	knownID := "http://example.edu/credentials/1872"
@@ -28,11 +25,8 @@ func BuildExampleUniversityVC(signer jwx.Signer, universityDID, recipientDID str
 		"alumniOf": map[string]any{ // claims are here
 			"id": recipientDID,
 			"name": []any{
-				map[string]any{"value": "Example University",
+				map[string]any{"value": "XYZ University",
 					"lang": "en",
-				}, map[string]any{
-					"value": "Exemple d'Université",
-					"lang":  "fr",
 				},
 			},
 		},
@@ -76,7 +70,10 @@ func BuildExampleUniversityVC(signer jwx.Signer, universityDID, recipientDID str
 	return credID, cred, nil
 }
 
-func BuildExampleUniversityVC3(signer jwx.Signer, universityDID, recipientDID string) (credID string, cred string, err error) {
+// BuildCombinedVC Makes a Verifiable Credential using the VC data type using the CredentialBuilder as part of the credentials package in the ssk-sdk.
+// It creates a credential with claims of Organisation name and all the groups that User is part of here/
+// In the demo, 20 groups are added in the VC
+func BuildCombinedVC(signer jwx.Signer, universityDID, recipientDID string) (credID string, cred string, err error) {
 	knownContext := []string{"https://www.w3.org/2018/credentials/v1",
 		"https://www.w3.org/2018/credentials/examples/v1"} // JSON-LD context statement
 	knownID := "http://example.edu/credentials/1872"
@@ -90,37 +87,34 @@ func BuildExampleUniversityVC3(signer jwx.Signer, universityDID, recipientDID st
 			"name": []any{
 				map[string]any{"value": "Example University",
 					"lang": "en",
-				}, map[string]any{
-					"value": "Exemple d'Université",
-					"lang":  "fr",
 				},
 			},
 			"roles": []any{
-				map[string]any{"value": "Finance Analyst",
+				map[string]any{"value": "Teaching Assistant",
 					"lang": "en",
 				}, map[string]any{
 					"value": "Hiking Group",
 					"lang":  "fr",
 				}, map[string]any{
-					"value": "Hiking Group",
+					"value": "Group1",
 					"lang":  "fr",
 				}, map[string]any{
-					"value": "Hiking Group2",
+					"value": "Group2",
 					"lang":  "fr",
 				}, map[string]any{
-					"value": "Hiking Group3",
+					"value": "Group3",
 					"lang":  "fr",
 				}, map[string]any{
-					"value": "Hiking Group5",
+					"value": "Group5",
 					"lang":  "fr",
 				}, map[string]any{
-					"value": "Hiking Group6",
+					"value": "Group6",
 					"lang":  "fr",
 				}, map[string]any{
-					"value": "Hiking Group2",
+					"value": "Group2",
 					"lang":  "fr",
 				}, map[string]any{
-					"value": "Hiking Group3",
+					"value": "Group3",
 					"lang":  "fr",
 				}, map[string]any{
 					"value": "Hiking Group5",
@@ -195,7 +189,9 @@ func BuildExampleUniversityVC3(signer jwx.Signer, universityDID, recipientDID st
 	return credID, cred, nil
 }
 
-func BuildExampleUniversityMembershipVC(signer jwx.Signer, universityDID, recipientDID string) (credID string, cred string, err error) {
+// BuildMembershipVC  Makes a Verifiable Credential using the VC data type using the CredentialBuilder as part of the credentials package
+// It creates a credential with claims of group name that the user is part of.
+func BuildMembershipVC(signer jwx.Signer, universityDID, recipientDID string) (credID string, cred string, err error) {
 	knownContext := []string{"https://www.w3.org/2018/credentials/v1",
 		"https://www.w3.org/2018/credentials/examples/v1"} // JSON-LD context statement
 	knownID := "http://example.edu/credentials/18723"
@@ -203,11 +199,10 @@ func BuildExampleUniversityMembershipVC(signer jwx.Signer, universityDID, recipi
 	knownIssuer := universityDID
 	knownIssuanceDate := time.Now().Format(time.RFC3339)
 	knownSubject := map[string]any{
-		//"id": recipientDID, // did:<method-name>:<method-specific-id>
 		"IdentityReference": map[string]any{ // claims are here
 			"id": recipientDID,
 			"roles": []any{
-				map[string]any{"value": "Finance Analyst",
+				map[string]any{"value": "Teaching Assistant",
 					"lang": "en",
 				},
 			},

@@ -89,7 +89,7 @@ func main() {
 
 		universitySigner, err := jwx.NewJWXSigner(universityDID, universityKID, universityKey)
 		example.HandleExampleError(err, "failed to build university signer")
-		vcID, vc, err := emp.BuildExampleUniversityVC(*universitySigner, universityDID, studentDID)
+		vcID, vc, err := emp.BuildSampleIdentityVC(*universitySigner, universityDID, studentDID)
 		example.HandleExampleError(err, "failed to build vc")
 
 		example.WriteStep("Example University Sends VC to Student (Holder)", step)
@@ -105,7 +105,7 @@ func main() {
 		example.WriteStep("Example University Creates MembershipVC for Holder", step)
 		step++
 
-		vcID2, vc2, err2 := emp.BuildExampleUniversityMembershipVC(*universitySigner, universityDID, studentDID)
+		vcID2, vc2, err2 := emp.BuildMembershipVC(*universitySigner, universityDID, studentDID)
 		example.HandleExampleError(err2, "failed to build vc")
 
 		example.WriteStep("Example University Sends VC to Student (Holder)", step)
@@ -121,7 +121,7 @@ func main() {
 		example.WriteStep("Employer wants to verify student graduated from Example University. Sends a presentation request", step)
 		step++
 
-		presentationData, err := emp.MakePresentationData2("test-id", "id-1", "id-2", universityDID)
+		presentationData, err := emp.MakeCombinedPresentationData("test-id", "id-1", "id-2", universityDID)
 		example.HandleExampleError(err, "failed to create pd")
 
 		dat, err := json.Marshal(presentationData)
@@ -138,7 +138,7 @@ func main() {
 
 		employerVerifier, err := employerSigner.ToVerifier(studentDID)
 		example.HandleExampleError(err, "failed to build employer verifier")
-		submission, err := emp.BuildPresentationSubmission2(string(presentationRequestJWT), *employerVerifier, *studentSigner, vc, vc2)
+		submission, err := emp.BuildCombinedPresentationSubmission(string(presentationRequestJWT), *employerVerifier, *studentSigner, vc, vc2)
 		example.HandleExampleError(err, "failed to build presentation submission")
 
 		verifier, err := studentSigner.ToVerifier(employerDID)
@@ -214,7 +214,7 @@ func main() {
 
 		universitySigner, err := jwx.NewJWXSigner(universityDID, universityKID, universityKey)
 		example.HandleExampleError(err, "failed to build university signer")
-		vcID, vc, err := emp.BuildExampleUniversityVC3(*universitySigner, universityDID, studentDID)
+		vcID, vc, err := emp.BuildCombinedVC(*universitySigner, universityDID, studentDID)
 		example.HandleExampleError(err, "failed to build vc")
 
 		example.WriteStep("Example University Sends VC to Student (Holder)", step)

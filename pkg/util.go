@@ -16,6 +16,7 @@ type Entity struct {
 	Name   string
 }
 
+// Holds the assigned DIDs
 func (e *Entity) GetWallet() *example.SimpleWallet {
 	return e.wallet
 }
@@ -31,10 +32,7 @@ func NewEntity(name string, didMethod did.Method) (*Entity, error) {
 	return &e, nil
 }
 
-// MakePresentationRequest Builds a presentation request (PR). A PR is sent by a holder to a verifier. It can be sent
-// over multiple mechanisms. For more information, please go to here:
-// https://identity.foundation/presentation-exchange/#presentation-request and for the source code with the sdk,
-// https://github.com/TBD54566975/ssi-sdk/blob/main/credential/exchange/request.go is appropriate to start off with.
+// MakePresentationRequest Builds a presentation request (PR) sent by the verifier
 func MakePresentationRequest(key gocrypto.PrivateKey, keyID string, presentationData exchange.PresentationDefinition, requesterID, audienceID string) (pr []byte, signer *jwx.Signer, err error) {
 	example.WriteNote("Presentation Request (JWT) is created")
 
@@ -90,7 +88,8 @@ func BuildPresentationSubmission(presentationRequestJWT string, verifier jwx.Ver
 	return submissionBytes, nil
 }
 
-func BuildPresentationSubmission2(presentationRequestJWT string, verifier jwx.Verifier, signer jwx.Signer, vc string, vc2 string) ([]byte, error) {
+// BuildCombinedPresentationSubmission combines 2 VCs for submission to the presentation request
+func BuildCombinedPresentationSubmission(presentationRequestJWT string, verifier jwx.Verifier, signer jwx.Signer, vc string, vc2 string) ([]byte, error) {
 	presentationClaim := exchange.PresentationClaim{
 		Token:                         &vc,
 		JWTFormat:                     exchange.JWTVC.Ptr(),
@@ -130,9 +129,9 @@ func BuildPresentationSubmission2(presentationRequestJWT string, verifier jwx.Ve
 	return submissionBytes, nil
 }
 
-// MakePresentationData Makes a dummy presentation definition. These are eventually transported via Presentation Request.
-// For more information on presentation definitions view the spec here:
-// https://identity.foundation/presentation-exchange/#term:presentation-definition
+// MakePresentationData Makes a presentation definition. These are eventually transported via Presentation Request.
+// Used to request the VC by verifier. It expects fields like issuer and vc.issuer to be the data
+// Used in Case2 - (single VC presentation)
 func MakePresentationData(id, inputID, trustedIssuer string) (exchange.PresentationDefinition, error) {
 	// Input Descriptors: Describe the information the verifier requires of the holder
 	// https://identity.foundation/presentation-exchange/#input-descriptor
@@ -163,7 +162,9 @@ func MakePresentationData(id, inputID, trustedIssuer string) (exchange.Presentat
 	return def, err
 }
 
-func MakePresentationData2(id, inputID, inputID2, trustedIssuer string) (exchange.PresentationDefinition, error) {
+// MakeCombinedPresentationData requests the VC by verifier. It expects fields like issuer and vc.issuer to be in VC1 and identityReference in VC2
+// Used in Case1 - ( Combined VC presentation)
+func MakeCombinedPresentationData(id, inputID, inputID2, trustedIssuer string) (exchange.PresentationDefinition, error) {
 	// Input Descriptors: Describe the information the verifier requires of the holder
 	// https://identity.foundation/presentation-exchange/#input-descriptor
 	// Required fields: ID and Input Descriptors
