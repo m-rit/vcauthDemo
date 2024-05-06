@@ -73,7 +73,7 @@ func BuildSampleIdentityVC(signer jwx.Signer, universityDID, recipientDID string
 // BuildCombinedVC Makes a Verifiable Credential using the VC data type using the CredentialBuilder as part of the credentials package in the ssk-sdk.
 // It creates a credential with claims of Organisation name and all the groups that User is part of here/
 // In the demo, 20 groups are added in the VC
-func BuildCombinedVC(signer jwx.Signer, universityDID, recipientDID string) (credID string, cred string, err error) {
+func BuildSingleVC(signer jwx.Signer, universityDID, recipientDID string) (credID string, cred string, err error) {
 	knownContext := []string{"https://www.w3.org/2018/credentials/v1",
 		"https://www.w3.org/2018/credentials/examples/v1"} // JSON-LD context statement
 	knownID := "http://example.edu/credentials/1872"
@@ -83,14 +83,14 @@ func BuildCombinedVC(signer jwx.Signer, universityDID, recipientDID string) (cre
 	knownSubject := map[string]any{
 		"id": recipientDID, // did:<method-name>:<method-specific-id>
 		"alumniOf": map[string]any{ // claims are here
-			"id": recipientDID,
 			"name": []any{
 				map[string]any{"value": "Example University",
 					"lang": "en",
 				},
 			},
+		},
 			"roles": []any{
-				map[string]any{"value": "Teaching Assistant",
+				map[string]any{"value": "Group1",
 					"lang": "en",
 				}, map[string]any{
 					"value": "Hiking Group",
@@ -117,8 +117,8 @@ func BuildCombinedVC(signer jwx.Signer, universityDID, recipientDID string) (cre
 					"value": "Group3",
 					"lang":  "fr",
 				}, map[string]any{
-					"value": "Hiking Group5",
-					"lang":  "fr",
+					"value": "Group4",
+					"lang":  "en",
 				}, map[string]any{
 					"value": "Hiking Group6",
 					"lang":  "fr",
@@ -145,10 +145,22 @@ func BuildCombinedVC(signer jwx.Signer, universityDID, recipientDID string) (cre
 					"lang":  "fr",
 				}, map[string]any{
 					"value": "Hiking Group6",
+					"lang":  "fr",
+				}, map[string]any{
+					"value": "Hiking Group3",
+					"lang":  "fr",
+				}, map[string]any{
+					"value": "Hiking Group5",
+					"lang":  "fr",
+				}, map[string]any{
+					"value": "Teaching Assistant",
+					"lang":  "en",
+				}, map[string]any{
+					"value": "Hiking Group3",
 					"lang":  "fr",
 				},
 			},
-		},
+		
 	}
 
 	// For more information on VC object, go to:
