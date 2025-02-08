@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This repository contains code for managing interactions with Verifiable Credentials (VCs) in two different scenarios. The code demonstrates the issuance, storage, presentation, and verification of VCs using a sample implementation. Please refer to [this](https://drive.google.com/file/d/1enqMLx3HM_BGXDMtSRi5WFmGDPOJUwlY/view?usp=drive_link) for more details.
+This repository contains code for managing interactions with Verifiable Credentials (VCs) in two different scenarios. The code demonstrates the issuance, storage, presentation, and verification of VCs using a sample implementation. Please refer to [this paper](https://drive.google.com/file/d/1enqMLx3HM_BGXDMtSRi5WFmGDPOJUwlY/view?usp=drive_link) where the motivation and background are explained.
 
 ## Use Cases
 
